@@ -8,14 +8,15 @@
 }
 
 .App-header {
-  background-color: #222;
-  height: 150px;
+  background-color: #75BAD9;
+  height: 200px;
   padding: 20px;
   color: white;
+  font-family: 'Pacifico', cursive;
 }
 
 .App-title {
-  font-size: 1.5em;
+  font-size: 3em;
 }
 
 .App-intro {
