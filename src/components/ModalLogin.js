@@ -5,16 +5,23 @@ import {
     Button,
     Form
 } from 'react-bootstrap';
+import Firebase from 'firebase';
+import { Link, withRouter } from 'react-router-dom';
 
-class Welcome extends React.Component{
+class ModalLogin extends React.Component{
     constructor(props) {
         super(props);
     
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handleAuth = this.handleAuth.bind(this);
+        this.handleChangeEmail =  this.handleChangeEmail.bind(this);
+        this.handleChangePassword =  this.handleChangePassword.bind(this);
     
         this.state = {
           show: false,
+          email: '',
+          password: ''
         };
       }
     
@@ -26,9 +33,38 @@ class Welcome extends React.Component{
         this.setState({ show: true });
       }
 
+      handleChangeEmail(event) {
+        this.setState({
+            email: event.target.value
+        });
+      }
+
+      handleChangePassword(event) {
+        this.setState({
+            password: event.target.value
+        });
+      }
+
       handleAuth(){
-          console.log('voy a guardar correo y contrseña');
-          
+        const config = {
+            apiKey: "AIzaSyB27y1gdYay2HLN0R3YNB_Cu7jl4jWAoRU",
+            authDomain: "variosproyectos-35b23.firebaseapp.com",
+            databaseURL: "https://variosproyectos-35b23.firebaseio.com",
+            projectId: "variosproyectos-35b23",
+            storageBucket: "variosproyectos-35b23.appspot.com",
+            messagingSenderId: "317508774373"
+        };
+        Firebase.initializeApp(config);
+
+
+        Firebase.auth().signInWithEmailAndPassword((this.state.email), (this.state.password))
+        .then(this.props.history.replace('/timeline'))
+        .catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // ...
+        });
       }
     
     render() {
@@ -69,4 +105,4 @@ class Welcome extends React.Component{
     }
 }
 
-export default Welcome;
+export default withRouter(ModalLogin);

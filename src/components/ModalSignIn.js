@@ -3,10 +3,13 @@ import React, { Component } from 'react';
 import {
     Modal,
     Button,
-    Form
+    Form,
+    FormGroup,
+    Label,
+    FormControl
 } from 'react-bootstrap';
 import Firebase from 'firebase';
-import Timeline from './Timeline.js';
+// import Timeline from './Timeline.js';
 import { Link, withRouter } from 'react-router-dom';
 
 class Welcome extends React.Component{
@@ -18,11 +21,17 @@ class Welcome extends React.Component{
         this.handleAuth = this.handleAuth.bind(this);
         this.handleChangeEmail =  this.handleChangeEmail.bind(this);
         this.handleChangePassword =  this.handleChangePassword.bind(this);
+        this.handleChangeUser = this.handleChangeUser.bind(this);
+        this.handleChangeNameDog = this.handleChangeNameDog.bind(this);
+        this.handleChangeAgeDog = this.handleChangeAgeDog.bind(this);
     
         this.state = {
           show: false,
           email: '',
           password: '',
+          user : '',
+          nameDog: '',
+          ageDog: '', 
           redirect: false
         };
       }
@@ -47,6 +56,24 @@ class Welcome extends React.Component{
         });
       }
 
+      handleChangeUser(event) {
+        this.setState({
+            user: event.target.value
+        });
+      }
+
+      handleChangeNameDog(event) {
+        this.setState({
+            nameDog: event.target.value
+        });
+      }
+
+      handleChangeAgeDog(event) {
+        this.setState({
+            ageDog: event.target.value
+        });
+      }
+
       handleAuth(){
         const config = {
             apiKey: "AIzaSyB27y1gdYay2HLN0R3YNB_Cu7jl4jWAoRU",
@@ -59,6 +86,16 @@ class Welcome extends React.Component{
         Firebase.initializeApp(config);
 
         Firebase.auth().createUserWithEmailAndPassword((this.state.email), (this.state.password))
+        .then(
+            Firebase.firestore().collection("doggoBook").add({
+                ageDog: this.state.ageDog,
+                dogBreed: 'No definido',
+                dogName: this.state.nameDog,
+                email: this.state.email,
+                genderDog: 'Macho',
+                userName: this.state.user
+            })
+        )
         .then(this.props.history.replace('/timeline'))
         .catch(function(error) {
             // Handle Errors here.
@@ -88,8 +125,24 @@ class Welcome extends React.Component{
 
                     <Form.Group controlId="formBasicPassword">
                         <Form.Label>Contraseña</Form.Label>
-                        <Form.Control type="password" value={this.state.password} onChange={this.handleChangePassword} placeholder="Contraseña" />
+                        <Form.Control type="password" value={this.state.password} onChange={this.handleChangePassword} placeholder="Contraseña123" />
                     </Form.Group>
+
+                    <FormGroup>
+                        <Form.Label>Usuario</Form.Label>
+                        <FormControl type="text" value={this.state.user} onChange={this.handleChangeUser} placeholder="esme_rivero" />
+                    </FormGroup>
+
+                    <FormGroup>
+                        <Form.Label>Nombre de tu perrit@</Form.Label>
+                        <FormControl type="text" value={this.state.nameDog} onChange={this.handleChangeNameDog} placeholder="Zeus" />
+                    </FormGroup>
+
+                    <FormGroup>
+                        <Form.Label>Edad de tu perrit@</Form.Label>
+                        <FormControl type="number" value={this.state.ageDog} onChange={this.handleChangeAgeDog} placeholder="3" />
+                    </FormGroup>  
+
                 </Form>
                 </Modal.Body>
                 <Modal.Footer>
