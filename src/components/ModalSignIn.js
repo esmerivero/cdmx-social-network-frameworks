@@ -75,16 +75,6 @@ class Welcome extends React.Component{
       }
 
       handleAuth(){
-        const config = {
-            apiKey: "AIzaSyB27y1gdYay2HLN0R3YNB_Cu7jl4jWAoRU",
-            authDomain: "variosproyectos-35b23.firebaseapp.com",
-            databaseURL: "https://variosproyectos-35b23.firebaseio.com",
-            projectId: "variosproyectos-35b23",
-            storageBucket: "variosproyectos-35b23.appspot.com",
-            messagingSenderId: "317508774373"
-        };
-        Firebase.initializeApp(config);
-
         Firebase.auth().createUserWithEmailAndPassword((this.state.email), (this.state.password))
         .then(
             Firebase.firestore().collection("doggoBook").add({
